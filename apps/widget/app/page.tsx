@@ -11,7 +11,12 @@ export default function Page() {
   return (
     <div className="flex flex-col items-center justify-center min-h-svh gap-6">
       <h1 className="text-2xl font-bold">Hello from Widget</h1>
-      <Button size="sm" onClick={() => void addUser({})}>
+      <Button
+        size="sm"
+        onClick={() => {
+          addUser({}).catch((error) => console.error(error));
+        }}
+      >
         Add user
       </Button>
       {users === undefined ? (
