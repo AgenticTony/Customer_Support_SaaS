@@ -1,25 +1,16 @@
 "use client";
 
-import { SignInButton, UserButton } from "@clerk/nextjs";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { api } from "@workspace/backend/_generated/api";
-import {
-  Authenticated,
-  Unauthenticated,
-  useMutation,
-  useQuery,
-} from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { Button } from "@workspace/ui/components/button";
 
 export default function Page() {
   return (
     <main className="flex min-h-svh flex-col items-center justify-center gap-6">
-      <Authenticated>
-        <UserButton />
-        <Users />
-      </Authenticated>
-      <Unauthenticated>
-        <SignInButton />
-      </Unauthenticated>
+      <UserButton />
+      <OrganizationSwitcher hidePersonal />
+      <Users />
     </main>
   );
 }
