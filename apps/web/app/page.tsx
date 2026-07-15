@@ -1,16 +1,35 @@
 "use client";
 
+import { SignInButton, UserButton } from "@clerk/nextjs";
 import { api } from "@workspace/backend/_generated/api";
-import { useMutation, useQuery } from "convex/react";
+import {
+  Authenticated,
+  Unauthenticated,
+  useMutation,
+  useQuery,
+} from "convex/react";
 import { Button } from "@workspace/ui/components/button";
 
 export default function Page() {
+  return (
+    <main className="flex min-h-svh flex-col items-center justify-center gap-6">
+      <Authenticated>
+        <UserButton />
+        <Users />
+      </Authenticated>
+      <Unauthenticated>
+        <SignInButton />
+      </Unauthenticated>
+    </main>
+  );
+}
+
+function Users() {
   const users = useQuery(api.users.getMany);
   const addUser = useMutation(api.users.add);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-svh gap-6">
-      <h1 className="text-2xl font-bold">Hello World</h1>
+    <div className="flex flex-col items-center gap-4">
       <Button
         size="sm"
         onClick={() => {
