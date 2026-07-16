@@ -13,10 +13,13 @@ export const add = mutation({
       throw new Error("Not authenticated");
     }
 
-    // Custom claim added to the Clerk `convex` JWT template: `"org_id": "{{org.id}}"`.
-    // It is untyped on the Convex side, so we cast. Every org-scoped record will
-    // store and be compared against this id — this check is the multi-tenant gate.
-    const orgId = identity.orgId as string;
+    // Require an active organization. The `org_id` claim comes from the Clerk
+    // `convex` JWT template (`"org_id": "{{org.id}}"`). Convex surfaces custom
+    // claims under their original snake_case key (not camelCased like its known
+    // standard claims), so we read `identity.org_id`. It is untyped on the
+    // Convex side, hence the cast. This gates writes; later chapters scope the
+    // stored records and reads by this id.
+    const orgId = identity.org_id as string;
     if (!orgId) {
       throw new Error("Missing organization");
     }

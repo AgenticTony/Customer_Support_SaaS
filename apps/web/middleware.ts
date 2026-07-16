@@ -1,13 +1,14 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"]);
+const PUBLIC_ROUTES = ["/sign-in(.*)", "/sign-up(.*)"];
+
+const isPublicRoute = createRouteMatcher(PUBLIC_ROUTES);
 
 // Routes that an authenticated user may visit without an active organization.
 // `/org-selection` must be included or the org-redirect below loops infinitely.
 const isOrgFreeRoute = createRouteMatcher([
-  "/sign-in(.*)",
-  "/sign-up(.*)",
+  ...PUBLIC_ROUTES,
   "/org-selection(.*)",
 ]);
 
@@ -19,12 +20,7 @@ export default clerkMiddleware(async (auth, req) => {
   }
 
   if (userId && !orgId && !isOrgFreeRoute(req)) {
-    const searchParams = new URLSearchParams({ redirectUrl: req.url });
-    const orgSelection = new URL(
-      `/org-selection?${searchParams.toString()}`,
-      req.url,
-    );
-    return NextResponse.redirect(orgSelection);
+    return NextResponse.redirect(new URL("/org-selection", req.url));
   }
 });
 

@@ -10,7 +10,12 @@ export const OrganizationGuard = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { organization } = useOrganization();
+  const { isLoaded, organization } = useOrganization();
+
+  // Avoid flashing OrgSelectionView while Clerk hydrates the active org.
+  if (!isLoaded) {
+    return null;
+  }
 
   if (!organization) {
     return (
