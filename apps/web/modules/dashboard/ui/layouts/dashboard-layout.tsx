@@ -22,7 +22,9 @@ export const DashboardLayout = async ({
   children: React.ReactNode;
 }) => {
   const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+  // `!== "false"` (not `=== "true"`) so a missing cookie defaults to OPEN,
+  // matching SidebarProvider's default — first-time visitors see the full sidebar.
+  const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
 
   return (
     <AuthGuard>

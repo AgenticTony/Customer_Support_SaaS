@@ -89,33 +89,41 @@ function EchoMark({ className }: { className?: string }) {
   );
 }
 
-const collapsed = "group-data-[collapsible=icon]";
-
+// Full literal selectors (NOT interpolated) so Tailwind's source scanner emits
+// the collapsed-variant rules — `${var}:hidden!` would never be generated.
 const orgSwitcherAppearance = {
   elements: {
     rootBox: "w-full! h-8!",
     avatarBox: "size-4! rounded-sm!",
-    organizationSwitcherTrigger: `w-full! justify-start! ${collapsed}:size-8! ${collapsed}:p-2!`,
-    organizationPreview: `${collapsed}:justify-center! gap-2!`,
-    organizationPreviewTextContainer: `${collapsed}:hidden! text-xs! font-medium! text-sidebar-foreground!`,
-    organizationSwitcherTriggerIcon: `${collapsed}:hidden! ml-auto! text-sidebar-foreground!`,
+    organizationSwitcherTrigger:
+      "w-full! justify-start! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!",
+    organizationPreview: "group-data-[collapsible=icon]:justify-center! gap-2!",
+    organizationPreviewTextContainer:
+      "group-data-[collapsible=icon]:hidden! text-xs! font-medium! text-sidebar-foreground!",
+    organizationSwitcherTriggerIcon:
+      "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground!",
   },
 };
 
 const userButtonAppearance = {
   elements: {
     rootBox: "w-full! h-8!",
-    userButtonTrigger: `w-full! p-2! hover:bg-sidebar-accent! hover:text-sidebar-accent-foreground! ${collapsed}:size-8! ${collapsed}:p-2!`,
-    userButtonBox: `w-full! flex-row-reverse! justify-end! gap-2! ${collapsed}:justify-center! text-sidebar-foreground!`,
-    userButtonOuterIdentifier: `pl-0! ${collapsed}:hidden!`,
+    userButtonTrigger:
+      "w-full! p-2! hover:bg-sidebar-accent! hover:text-sidebar-accent-foreground! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!",
+    userButtonBox:
+      "w-full! flex-row-reverse! justify-end! gap-2! group-data-[collapsible=icon]:justify-center! text-sidebar-foreground!",
+    userButtonOuterIdentifier: "pl-0! group-data-[collapsible=icon]:hidden!",
     avatarBox: "size-4!",
   },
 };
 
 export function DashboardSidebar() {
   const pathname = usePathname();
+  // Exact match or a real path-segment prefix, so /files won't highlight /files-archive.
   const isActive = (url: string) =>
-    url === "/" ? pathname === url : pathname.startsWith(url);
+    url === "/"
+      ? pathname === url
+      : pathname === url || pathname.startsWith(url + "/");
 
   return (
     <Sidebar collapsible="icon" className="group">
@@ -139,7 +147,7 @@ export function DashboardSidebar() {
                   <OrganizationSwitcher
                     hidePersonal
                     skipInvitationScreen
-                    afterSelectOrganizationUrl="/"
+                    afterSelectOrganizationUrl="/conversations"
                     appearance={orgSwitcherAppearance}
                   />
                 </SidebarMenuButton>

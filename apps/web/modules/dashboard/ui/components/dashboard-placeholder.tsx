@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 
+import { Separator } from "@workspace/ui/components/separator";
 import { SidebarTrigger } from "@workspace/ui/components/sidebar";
 
 /**
@@ -22,7 +23,10 @@ export function DashboardPlaceholder({
     <div className="flex flex-1 flex-col">
       <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border bg-card/60 px-4 backdrop-blur md:px-6">
         <SidebarTrigger className="-ml-1" />
-        <span className="mx-1 hidden h-4 w-px bg-border md:block" />
+        <Separator
+          orientation="vertical"
+          className="mx-1 hidden h-4 md:block"
+        />
         {Icon ? <Icon className="size-4 text-muted-foreground" /> : null}
         <h1 className="text-base font-semibold tracking-tight">{title}</h1>
       </header>
