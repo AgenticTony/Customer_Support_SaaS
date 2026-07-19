@@ -128,4 +128,7 @@
   button:not(:disabled) {
     cursor: pointer;
   }
+  ::selection {
+    background-color: color-mix(in oklab, var(--primary) 22%, transparent);
+  }
 }

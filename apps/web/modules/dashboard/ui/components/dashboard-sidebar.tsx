@@ -170,8 +170,10 @@ export function DashboardSidebar() {
                         tooltip={item.title}
                         isActive={active}
                         className={cn(
+                          // Solid indigo active pill — robust (no flat-gradient or muddy-hover
+                          // overrides) and pops on the dark sidebar. `!` beats shadcn's data-[active] rules.
                           active &&
-                            "bg-gradient-to-b from-sidebar-primary to-[#6366f1]! text-sidebar-primary-foreground! shadow-sm hover:to-[#6366f1]/90!",
+                            "bg-sidebar-primary! text-sidebar-primary-foreground! font-medium",
                         )}
                       >
                         <Link href={item.url}>
