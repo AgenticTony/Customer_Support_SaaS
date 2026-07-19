@@ -28,6 +28,10 @@ out/
 build
 dist
 
+# Python (services/voice venv + caches)
+.venv/
+__pycache__/
+
 
 # Debug
 npm-debug.log*
