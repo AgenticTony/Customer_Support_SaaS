@@ -1,35 +1,24 @@
 "use client";
 
-import { api } from "@workspace/backend/_generated/api";
-import { useMutation, useQuery } from "convex/react";
-import { Button } from "@workspace/ui/components/button";
+import { use } from "react";
 
-export default function Page() {
-  const users = useQuery(api.users.getMany);
-  const addUser = useMutation(api.users.add);
+import { WidgetView } from "@/modules/widget/ui/views/widget-view";
 
+interface Props {
+  searchParams: Promise<{ organizationId: string }>;
+}
+
+/**
+ * The widget entry. The embed script (ch. 34) loads this in an iframe with the
+ * org id as a query param: `/?organizationId=<id>`. React `use()` unwraps the
+ * searchParams promise (Next 15+). Capitalization of `organizationId` matters
+ * everywhere — it must match the embed URL and the Clerk/Convex org id.
+ */
+export default function Page({ searchParams }: Props) {
+  const { organizationId } = use(searchParams);
   return (
-    <div className="flex flex-col items-center justify-center min-h-svh gap-6">
-      <h1 className="text-2xl font-bold">Hello from Widget</h1>
-      <Button
-        size="sm"
-        onClick={() => {
-          addUser({}).catch((error) => console.error(error));
-        }}
-      >
-        Add user
-      </Button>
-      {users === undefined ? (
-        <p className="text-muted-foreground">Loading…</p>
-      ) : users.length === 0 ? (
-        <p className="text-muted-foreground">No users yet</p>
-      ) : (
-        <ul className="flex flex-col gap-1">
-          {users.map((u) => (
-            <li key={u._id}>{u.name}</li>
-          ))}
-        </ul>
-      )}
+    <div className="h-svh w-full">
+      <WidgetView organizationId={organizationId} />
     </div>
   );
 }
